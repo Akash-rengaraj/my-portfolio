@@ -1,0 +1,209 @@
+:root {
+  --dev-rush-bg: #000000;
+  --dev-rush-window: #09090b;
+  --dev-rush-header: #18181b;
+  --dev-rush-text: #e4e4e7;
+  --dev-rush-prompt: #ef4444; /* Kali Root Red */
+  --dev-rush-cmd: #fbbf24;
+  --dev-rush-border: #27272a;
+  --dev-rush-yaml-key: #60a5fa;
+  --dev-rush-yaml-val: #a78bfa;
+}
+
+.dev-rush-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--dev-rush-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+
+.dev-rush-dashboard {
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--dev-rush-window);
+  border: 1px solid var(--dev-rush-border);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(239, 68, 68, 0.05); /* Slight red glow */
+  display: flex;
+  flex-direction: column;
+}
+
+.dev-header {
+  background-color: var(--dev-rush-header);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--dev-rush-border);
+  position: relative;
+}
+
+.mac-buttons {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+}
+
+.mac-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.mac-btn.close { background-color: #ff5f56; }
+.mac-btn.minimize { background-color: #ffbd2e; }
+.mac-btn.maximize { background-color: #27c93f; }
+
+.tab-title {
+  width: 100%;
+  text-align: center;
+  color: var(--dev-rush-text);
+  font-size: 0.85rem;
+  font-weight: bold;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+}
+
+.terminal-body {
+  padding: 2rem;
+  color: var(--dev-rush-text);
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.cmd-line {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.cmd-line.spacing {
+  margin-top: 2rem;
+}
+
+.prompt {
+  color: var(--dev-rush-prompt);
+  font-weight: bold;
+}
+
+.command {
+  color: var(--dev-rush-cmd);
+}
+
+.stdout {
+  margin-top: 1rem;
+  margin-left: 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 2px 2px 0px #ef4444; /* Brutalist shadow */
+}
+
+.cursor {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.yaml-output {
+  background-color: rgba(255,255,255,0.03);
+  padding: 1.5rem;
+  border: 1px dashed var(--dev-rush-border);
+  border-radius: 4px;
+  margin: 1rem 0 0 2rem;
+  line-height: 1.6;
+  color: var(--dev-rush-yaml-val);
+}
+
+.repo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1rem 0 0 2rem;
+}
+
+.repo-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.repo-internal {
+  border: 1px solid var(--dev-rush-border);
+  background-color: #121214;
+  padding: 1.5rem;
+  border-radius: 4px;
+  transition: all 0.1s;
+}
+
+.repo-internal:hover {
+  border-color: var(--dev-rush-cmd);
+  background-color: #1a1a1e;
+  transform: translateX(5px); /* Brutalist hover */
+}
+
+.repo-internal h4 {
+  margin: 0 0 0.5rem 0;
+  color: #60a5fa;
+  font-size: 1.1rem;
+}
+
+.repo-internal p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #a1a1aa;
+}
+
+.dev-cta-row {
+  margin: 1.5rem 0 0 2rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.brutalist-btn {
+  background-color: transparent;
+  color: var(--dev-rush-text);
+  border: 2px solid var(--dev-rush-text);
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.1s;
+}
+
+.brutalist-btn:hover {
+  background-color: var(--dev-rush-text);
+  color: #000;
+}
+
+.brutalist-btn.primary {
+  border-color: var(--dev-rush-prompt);
+  color: var(--dev-rush-prompt);
+}
+
+.brutalist-btn.primary:hover {
+  background-color: var(--dev-rush-prompt);
+  color: #000;
+}
+
+@media (max-width: 700px) {
+  .repo-grid {
+    grid-template-columns: 1fr;
+  }
+}

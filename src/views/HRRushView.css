@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;600;800&display=swap');
+
+:root {
+  --hr-rush-bg: #fcfceb;
+  --hr-rush-nav-bg: #222222;
+  --hr-rush-text-primary: #1c1c1c;
+  --hr-rush-text-secondary: #4a4a4a;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.hr-rush-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--hr-rush-bg);
+  color: var(--hr-rush-text-primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 2rem; /* Creates an absolute 2rem boundary around the entire view */
+}
+
+/* Container for Hero and Nav */
+.hero-wrapper-container {
+  position: relative;
+  width: 100%;
+  max-width: 1700px;
+  height: calc(100vh - 4rem);
+  margin: 0 auto 4rem auto; /* 0 auto handles the sides, 4rem bottom creates space before next sections */
+  border-radius: 40px;
+  border: 3px solid #dfe4ea; /* Soft colored border */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+  background-color: #ffffff;
+  /* White grid background */
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Floating Pill Navigation */
+.hr-rush-nav {
+  position: absolute; /* Changed from fixed so it stays within the new wrapper */
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1000px;
+  background-color: var(--hr-rush-nav-bg);
+  border-radius: 40px;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.nav-brand {
+  font-family: 'Abril Fatface', serif;
+  color: #ffffff;
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.nav-links-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap; /* Allows wrapping if narrow */
+  justify-content: flex-end;
+}
+
+.nav-btn {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 0.95rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Base Sections */
+.hr-rush-section {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Section */
+.hr-hero-section {
+  height: 100%;
+  margin-top: 0;
+  padding-top: 8rem; /* space for the nav */
+  background: transparent;
+  position: relative;
+}
+
+/* Central Hero Content */
+.hero-content {
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+  z-index: 2; /* Ensure it stays above floating icons */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-name {
+  font-family: 'Abril Fatface', serif;
+  font-size: 4.5rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin: 0;
+  color: #1a224a; /* A very dark blue to match the reference text color */
+}
+
+.hero-punchline {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #666;
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.3;
+}
+
+.hero-subtext {
+  font-size: 1.1rem;
+  color: var(--hr-rush-text-secondary);
+  font-weight: 400;
+  margin: 0 0 3rem 0; /* Space before the photo */
+}
+
+.hero-photo-container {
+  width: 100%;
+  max-width: 600px; /* Greatly increased to make the hero illustration dominant */
+  height: auto;
+  margin: 0 auto;
+  background: transparent;
+  box-shadow: none;
+  position: relative;
+  /* Adding an ambient glow behind the photo to make it pop */
+}
+
+/* Natural Floor Shadow below the photo */
+.hero-photo-container::after {
+  content: '';
+  position: absolute;
+  bottom: 5px; /* Sits right at the base of the image */
+  left: 52%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 25px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, transparent 70%);
+  z-index: -1;
+  filter: blur(4px);
+  opacity: 0.8;
+}
+
+.hero-photo-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(200, 220, 255, 0.8) 0%, transparent 70%);
+  filter: blur(40px);
+  z-index: -1;
+  opacity: 0.7;
+  animation: pulse-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
+  100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.hero-photo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  /* Use filter for slight drop shadow on a transparent PNG */
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
+}
+
+/* Floating Icons Container */
+.floating-icons-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1; /* Above the background, behind the hero */
+  overflow: hidden;
+}
+
+.float-icon {
+  position: absolute;
+  width: auto;
+  opacity: 0.45; /* Soften visual weight to push to background */
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)) blur(2px); /* Depth of field effect (Figure-Ground principle) */
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  z-index: 1; /* Keep strictly behind accessories and hero */
+}
+
+/* Organic drifting animations */
+@keyframes float-1 {
+  0% { transform: translate3d(0px, 0px, 0px) rotate(auto); }
+  33% { transform: translate3d(15px, -25px, 0px) rotate(5deg); }
+  66% { transform: translate3d(-10px, -15px, 0px) rotate(-2deg); }
+  100% { transform: translate3d(0px, 0px, 0px) rotate(auto); }
+}
+
+@keyframes float-2 {
+  0% { transform: translate3d(0px, 0px, 0px) rotate(auto); }
+  33% { transform: translate3d(-20px, -15px, 0px) rotate(-8deg); }
+  66% { transform: translate3d(10px, -30px, 0px) rotate(3deg); }
+  100% { transform: translate3d(0px, 0px, 0px) rotate(auto); }
+}
+
+@keyframes float-3 {
+  0% { transform: translate3d(0px, 0px, 0px) scale(1) rotate(auto); }
+  50% { transform: translate3d(0px, -20px, 0px) scale(1.05) rotate(auto); }
+  100% { transform: translate3d(0px, 0px, 0px) scale(1) rotate(auto); }
+}
+
+/* 
+  Strategic "Donut Orbit" Placements 
+  - Reduced to 8
+  - Placed strictly in the middle-top, middle-bottom, and side gutters.
+  - Completely avoids the extreme corners where laptop, coffee, plant, and mobile sit!
+*/
+/* Top center */
+.float-icon-0 { top: 30%; left: 30%; height: 45px; animation: float-1 8s ease-in-out infinite; transform: rotate(-15deg); } /* vscode */
+.float-icon-1 { top: 20%; right: 35%; height: 40px; animation: float-2 9s ease-in-out infinite; animation-delay: -2s; transform: rotate(25deg); } /* antigravity */
+
+/* Left center gutter */
+.float-icon-2 { top: 45%; left: 15%; height: 40px; animation: float-3 7s ease-in-out infinite; animation-delay: -4s; } /* blender */
+.float-icon-3 { top: 60%; left: 30%; height: 40px; animation: float-1 10s ease-in-out infinite; animation-delay: -1s; transform: rotate(-12deg); } /* da vinci */
+
+/* Right center gutter */
+.float-icon-4 { top: 35%; right: 20%; height: 60px; animation: float-2 8.5s ease-in-out infinite; animation-delay: -3s; transform: rotate(18deg); } /* blackmagic */
+.float-icon-5 { top: 55%; right: 25%; height: 55px; animation: float-3 9.5s ease-in-out infinite; animation-delay: -2.5s; transform: rotate(-22deg); } /* canva */
+
+/* Bottom center */
+.float-icon-6 { top: 82%; left: 25%; height: 100px; animation: float-2 7.5s ease-in-out infinite; animation-delay: -5s; transform: rotate(8deg); } /* kali linux */
+.float-icon-7 { top: 78%; right: 30%; height: 100px; animation: float-1 8.2s ease-in-out infinite; animation-delay: -1.5s; transform: rotate(-6deg); } /* github */
+
+/* Desk Accessories Styles (Knolling) */
+.accessories-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5; /* Popped above the floating background tools */
+  overflow: hidden;
+}
+
+.accessory {
+  position: absolute;
+  /* Smoother, premium knolling drop shadow */
+  filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.3));
+  transition: transform 0.5s ease;
+}
+
+/* Strategic placements modeled after your visual reference */
+.acc-laptop { top: -7%; left: -7%; width: 450px; transform: rotate(-40deg); }
+/* .acc-headset { bottom: 0%; right: 20%; width: 300px; transform: rotate(0deg); } */
+.acc-coffee { bottom: -10%; left: -7%; width: 400px; transform: rotate(-10deg); }
+.acc-plant { top: -10%; right: -10%; width: 500px; transform: rotate(-10deg); } 
+.acc-mobile { bottom: 20%; right: -10%; width: 400px; transform: rotate(320deg); }
+
+
+/* Placeholder Sub-Sections */
+.placeholder-section {
+  min-height: 60vh;
+}
+
+.placeholder-section:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.section-placeholder-content {
+  text-align: center;
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  padding: 4rem;
+  width: 100%;
+  max-width: 800px;
+  opacity: 0.5;
+}
+
+.section-placeholder-content h2 {
+  font-size: 2.5rem;
+  margin-top: 0;
+  color: var(--hr-rush-text-secondary);
+}
+
+.section-placeholder-content p {
+  font-size: 1.25rem;
+  color: #777;
+}
+
+@media (max-width: 768px) {
+  .hero-name {
+    font-size: 3rem;
+  }
+  .hero-photo-container {
+    width: 90%;
+    height: auto;
+  }
+  .hero-punchline {
+    font-size: 1.4rem;
+  }
+}
