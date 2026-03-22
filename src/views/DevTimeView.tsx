@@ -7,7 +7,7 @@ import "./DevTimeView.css";
 // A simple spinning 3D shape for the Hero section
 const SpinningShape = () => {
   const meshRef = useRef<Mesh>(null!);
-  useFrame((_, delta) => {
+  useFrame((_: any, delta: number) => {
     if (meshRef.current) {
       meshRef.current.rotation.x += delta * 0.2;
       meshRef.current.rotation.y += delta * 0.3;
