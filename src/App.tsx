@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import HRRushView from "./views/HRRushView";
-import HRTimeView from "./views/HRTimeView";
-import DevRushView from "./views/DevRushView";
-import DevTimeView from "./views/DevTimeView";
+import { useState, useEffect, Suspense, lazy } from "react";
+const HRRushView = lazy(() => import("./views/HRRushView"));
+const HRTimeView = lazy(() => import("./views/HRTimeView"));
+const DevRushView = lazy(() => import("./views/DevRushView"));
+const DevTimeView = lazy(() => import("./views/DevTimeView"));
 import "./App.css";
 
 const OPTIONS = [
@@ -65,11 +65,20 @@ function App() {
   }, [selectedIndex, isBooting, progress]);
 
   if (activeView) {
-    if (activeView === "hr-rush") return <HRRushView />;
-    if (activeView === "hr-time") return <HRTimeView />;
-    if (activeView === "dev-rush") return <DevRushView />;
-    if (activeView === "dev-time") return <DevTimeView />;
-    return null;
+    return (
+      <Suspense
+        fallback={
+          <div className="bios-container">
+            <div className="bios-header">Loading Assets...</div>
+          </div>
+        }
+      >
+        {activeView === "hr-rush" && <HRRushView />}
+        {activeView === "hr-time" && <HRTimeView />}
+        {activeView === "dev-rush" && <DevRushView />}
+        {activeView === "dev-time" && <DevTimeView />}
+      </Suspense>
+    );
   }
 
   if (isBooting) {

@@ -19,6 +19,8 @@ const HRRushView: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isCaffeineRush, setIsCaffeineRush] = useState(false);
   const [coffeeClicks, setCoffeeClicks] = useState(0);
+
+  // Navigation & Theme States
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Typewriter States
@@ -96,7 +98,7 @@ const HRRushView: React.FC = () => {
     return () => clearTimeout(timeout);
   }, [skillText, isDeleting, skillIndex, isCaffeineRush, skills]);
 
-  // Bento Cards Reveal & Hover Physics
+  // Playful Scroll Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -106,68 +108,17 @@ const HRRushView: React.FC = () => {
           }
         });
       },
-      { threshold: 0.1 },
+      { threshold: 0.15 },
     );
 
     document
-      .querySelectorAll(".bento-card")
+      .querySelectorAll(".playful-reveal")
       .forEach((el) => observer.observe(el));
 
-    const handleCardMouseMove = (e: MouseEvent) => {
-      const card = e.currentTarget as HTMLElement;
-      // Skip 3D tilt if the card is flipped (hobbies card)
-      if (card.classList.contains("flipped")) return;
-
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = ((y - centerY) / centerY) * -5;
-      const rotateY = ((x - centerX) / centerX) * 5;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-    };
-
-    const handleCardMouseLeave = (e: Event) => {
-      const card = e.currentTarget as HTMLElement;
-      if (card.classList.contains("flipped")) return;
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-    };
-
-    const cards = document.querySelectorAll(".bento-card");
-    cards.forEach((card) => {
-      card.addEventListener("mousemove", handleCardMouseMove as any);
-      card.addEventListener("mouseleave", handleCardMouseLeave);
-    });
-
-    const btn = document.querySelector(".magnetic-btn") as HTMLElement;
-    const handleBtnMove = (e: MouseEvent) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-    };
-    const handleBtnLeave = () => {
-      btn.style.transform = `translate(0px, 0px)`;
-    };
-
-    if (btn) {
-      btn.addEventListener("mousemove", handleBtnMove);
-      btn.addEventListener("mouseleave", handleBtnLeave);
-    }
-
     return () => {
-      cards.forEach((card) => observer.unobserve(card));
-      cards.forEach((card) => {
-        card.removeEventListener("mousemove", handleCardMouseMove as any);
-        card.removeEventListener("mouseleave", handleCardMouseLeave);
-      });
-      if (btn) {
-        btn.removeEventListener("mousemove", handleBtnMove);
-        btn.removeEventListener("mouseleave", handleBtnLeave);
-      }
+      document
+        .querySelectorAll(".playful-reveal")
+        .forEach((card) => observer.unobserve(card));
     };
   }, []);
 
@@ -178,7 +129,21 @@ const HRRushView: React.FC = () => {
     // Normalize to -1 to 1
     const x = (clientX / innerWidth - 0.5) * 2;
     const y = (clientY / innerHeight - 0.5) * 2;
-    setMousePosition({ x, y });
+    requestAnimationFrame(() => setMousePosition({ x, y }));
+  };
+
+  // About Section Interactive Dot Tracker
+  const handleAboutMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty("--cursor-x", `${x}px`);
+    e.currentTarget.style.setProperty("--cursor-y", `${y}px`);
+  };
+
+  const handleAboutMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.setProperty("--cursor-x", `-1000px`);
+    e.currentTarget.style.setProperty("--cursor-y", `-1000px`);
   };
 
   // Coffee Easter Egg
@@ -286,119 +251,240 @@ const HRRushView: React.FC = () => {
       </div>{" "}
       {/* End of hero-wrapper-container */}
       {/* End of hero-wrapper-container */}
-      {/* 1. Dark "About Me" Transition Section */}
-      <section className="about-transition-section">
+      {/* Dark Transition "About" Section */}
+      <section
+        id="about-intro"
+        className="about-transition-section"
+        onMouseMove={handleAboutMouseMove}
+        onMouseLeave={handleAboutMouseLeave}
+        style={
+          {
+            "--cursor-x": "-1000px",
+            "--cursor-y": "-1000px",
+          } as React.CSSProperties
+        }
+      >
+        {/* Top Left: Pinned Photos */}
+        <div className="pinned-photos-container">
+          <div className="pinned-polaroid p-left">
+            <div className="polaroid-image-frame">
+              <img src="v1/photos/my-hero-photo-1.png" alt="Memory 1" />
+            </div>
+            <div className="polaroid-pin"></div>
+          </div>
+          <div className="pinned-polaroid p-right">
+            <div className="polaroid-image-frame">
+              <img src="v1/photos/my-hero-photo-2.png" alt="Memory 2" />
+            </div>
+            <div className="polaroid-pin"></div>
+            <span className="polaroid-caption">clicks.</span>
+          </div>
+        </div>
+
         <h1 className="about-massive-title">About Me.</h1>
+
+        {/* Top Right: Camera Magnet */}
+        <div className="camera-magnet-container">
+          <div className="magnet-camera">
+            <span className="camera-icon">📷</span>
+          </div>
+          <div className="magnet-word">click</div>
+        </div>
+
+        {/* Bottom Left: Developer Badge */}
+        <div className="developer-badge-container">
+          <div className="dev-badge">
+            <span className="dev-badge-icon">{"</>"}</span>
+            <span className="dev-badge-text">Developer</span>
+          </div>
+        </div>
+
+        {/* Bottom Right: Spotify Functional Widget */}
+        <div className="spotify-widget-container">
+          <iframe
+            style={{ borderRadius: "12px", pointerEvents: "auto" }}
+            src="https://open.spotify.com/embed/track/3n3Ppam7vgaVa1iaRUc9Lp?utm_source=generator&theme=0"
+            width="100%"
+            height="300"
+            frameBorder="0"
+            allowFullScreen={false}
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+
         <div className="scroll-hint">↓</div>
       </section>
-      {/* 2. Glassmorphic Bento Grid */}
-      <section id="about" className="bento-section">
-        <div className="bento-grid-container">
-          {/* Card 1: Main Intro (2x2) */}
-          <div className="bento-card bento-main-intro bento-span-2x2">
-            <h3 className="bento-headline">
-              Designing experiences &<br />
-              writing clean logic.
-            </h3>
-            <p className="bento-p">
-              I focus on building intuitive, high-performance web applications
-              that merge striking aesthetics with robust engineering.
-            </p>
-            <div className="magnetic-btn-wrapper">
-              <button className="magnetic-btn">Get in Touch</button>
-            </div>
-            {/* Abstract 3D shape placeholder (CSS spinning element for now) */}
-            <div className="abstract-3d-shape"></div>
-          </div>
-
-          {/* Card 2: Tech Stack (2x1) */}
-          <div className="bento-card bento-tech bento-span-2x1">
-            <h4 className="bento-label">Tech Stack & Tools</h4>
-            <div className="tech-icons-grid">
-              {toolPlaceholders.slice(0, 10).map((tool) => (
-                <div className="tech-icon-wrapper" key={`stack-${tool.id}`}>
-                  <img
-                    src={tool.src}
-                    alt={tool.alt}
-                    className="tech-stack-icon"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                  <span className="tech-tooltip">Advanced</span>
+      {/* 2. The Playful & Tactile Storyboard */}
+      <section id="about-playful" className="playful-about-section">
+        {/* Section 1: The Pick a Card Core Skills */}
+        <div className="card-skills-section playful-reveal">
+          <div className="sticky-note">Hover to flip!</div>
+          <div className="cards-container">
+            {/* Card 1: The Logic */}
+            <div className="retro-flip-card">
+              <div className="flip-card-inner">
+                <div className="flip-card-front card-logic">
+                  <div className="front-visual">
+                    <span className="card-icon">🧠</span>
+                  </div>
+                  <h3 className="card-title">The Logic</h3>
                 </div>
-              ))}
+                <div className="flip-card-back">
+                  <p>
+                    "Building intelligent systems. Heavily focused on C++ DSA
+                    and crafting clean, scalable data pipelines."
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2: The Hardware */}
+            <div className="retro-flip-card">
+              <div className="flip-card-inner">
+                <div className="flip-card-front card-hardware">
+                  <div className="front-visual">
+                    <span className="card-icon">⚡</span>
+                  </div>
+                  <h3 className="card-title">The Hardware</h3>
+                </div>
+                <div className="flip-card-back">
+                  <p>
+                    "Bridging code and reality. Tinkering with ESP32s and
+                    building real-time, physical monitoring systems."
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3: The Canvas */}
+            <div className="retro-flip-card">
+              <div className="flip-card-inner">
+                <div className="flip-card-front card-canvas">
+                  <div className="front-visual">
+                    <span className="card-icon">🎬</span>
+                  </div>
+                  <h3 className="card-title">The Canvas</h3>
+                </div>
+                <div className="flip-card-back">
+                  <p>
+                    "Cinematic framing and 3D modeling. Using DaVinci Resolve
+                    and Blender to make the technical look beautiful."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 2: The Deep-Dive Showcase (Magazine Layout) */}
+        <div className="deep-dive-showcase playful-reveal">
+          <div className="showcase-left">
+            <div className="bold-colored-square">
+              <h3 className="square-text">Tech Lead</h3>
+              <div className="floating-3d-element">
+                <img
+                  src="v1/photos/accessories/mobile.png"
+                  alt="ESP32 Float"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="showcase-right">
+            <h2 className="showcase-title">
+              Project: Real-Time Health Monitor
+            </h2>
+            <p className="showcase-story">
+              Leading teams and pushing the boundaries of hardware/software
+              integration. I orchestrated the architecture for a massive
+              240-player e-sports event and engineered physical IoT endpoints.
+              It's about full-spectrum technical leadership.
+            </p>
+            <div className="showcase-stack">
+              <span className="stack-badge">Kali Linux</span>
+              <span className="stack-badge">C++</span>
+              <span className="stack-badge">React & Vite</span>
+              <span className="stack-badge">ESP32 Firmware</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: The Tactile Playful Bento */}
+        <div className="playful-bento-grid playful-reveal">
+          {/* Box 1: The Fridge */}
+          <div className="playful-box bento-fridge">
+            <div className="fridge-door">
+              <div className="fridge-handle"></div>
+              <div className="sticky goal-1">Hit new bench PR</div>
+              <div className="sticky goal-2">Plan next trip</div>
+              <div className="magnet m-1">🏔️</div>
+              <div className="magnet m-2">🌊</div>
             </div>
           </div>
 
-          {/* Card 3: Live Status (1x1) */}
-          <div className="bento-card bento-status bento-span-1x1">
-            <div className="status-header">
-              <span className="pulsing-dot"></span>
-              <h4 className="bento-label">Live Status</h4>
+          {/* Box 2: The Kitchen Box */}
+          <div className="playful-box bento-kitchen">
+            <div className="chef-cloche">
+              <div className="cloche-base"></div>
+              <div className="food-polaroids">
+                <div className="food-polaroid fp-1">
+                  <span>Cheesecake</span>
+                </div>
+                <div className="food-polaroid fp-2">
+                  <span>Tiramisu</span>
+                </div>
+                <div className="food-polaroid fp-3">
+                  <span>Fried Chicken</span>
+                </div>
+              </div>
+              <div className="cloche-cover">
+                <span className="cloche-handle"></span>
+                <span className="cloche-label">Hover to Open</span>
+              </div>
             </div>
-            <p className="status-text">
-              <span className="status-tag">Currently</span>
-              Building a full-stack web app
-            </p>
-            <p className="status-text mt-3">
-              <span className="status-tag">Learning</span>
-              Advanced System Architecture
-            </p>
           </div>
 
-          {/* Card 5: Project Spotlight (1x2 Tall) moved to right side visually */}
-          <div className="bento-card bento-spotlight bento-span-1x2">
-            <h4 className="bento-label absolute-label">Project Spotlight</h4>
+          {/* Box 3: The Spotify Player */}
+          <div className="playful-box bento-spotify">
+            <div className="mini-player">
+              <div className="player-art">🎵</div>
+              <div className="player-info">
+                <h4>Focus & Grind</h4>
+                <p>Heavy Coding Playlist</p>
+                <div className="progress-bar">
+                  <div className="progress-fill"></div>
+                </div>
+              </div>
+              <div className="player-controls">
+                <span>⏮</span> <span className="play-btn">▶</span>{" "}
+                <span>⏭</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Box 4: The Interactive Photo */}
+          <div className="playful-box bento-vibe-photo">
             <img
               src="v1/photos/my-hero-photo-1.png"
-              alt="Project"
-              className="spotlight-image"
+              alt="Vibe"
+              loading="lazy"
             />
-            <div className="spotlight-overlay">
-              <h4>VitalBridge IoT</h4>
-              <p>View Case Study ↗</p>
+            <div className="chat-bubble">
+              Hey! Ready to build something huge?
             </div>
           </div>
+        </div>
 
-          {/* Card 4: Journey / Milestones (2x1) */}
-          <div className="bento-card bento-journey bento-span-2x1">
-            <h4 className="bento-label">Journey & Milestones</h4>
-            <div className="milestone-scroll">
-              <div className="milestone-card">
-                <h5 className="ms-year">2024</h5>
-                <p className="ms-text">Launched Major Project</p>
-              </div>
-              <div className="milestone-card">
-                <h5 className="ms-year">2023</h5>
-                <p className="ms-text">Full-Stack Development</p>
-              </div>
-              <div className="milestone-card">
-                <h5 className="ms-year">2022</h5>
-                <p className="ms-text">Began Computer Science</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 6: Beyond the Screen (1x1) Flip Card */}
-          <div
-            className="bento-card bento-hobbies bento-span-1x1"
-            onClick={(e) => e.currentTarget.classList.toggle("flipped")}
-          >
-            <div className="flip-card-inner">
-              <div className="flip-card-front">
-                <h4 className="bento-label">Beyond the Screen</h4>
-                <div className="hobby-emojis">📷 🎾 ☕ ✈️</div>
-                <span className="flip-hint">Click to flip</span>
-              </div>
-              <div className="flip-card-back">
-                <p className="bento-p small-p">
-                  When I'm not coding, you'll find me shooting photos, playing
-                  tennis, or searching for the perfect espresso.
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* Section 4: The Outro Text */}
+        <div className="outro-text-section playful-reveal">
+          <p>
+            "When I'm not writing code or debugging hardware, I'm usually away
+            from my screen. I'm either in the kitchen trying out a new
+            high-protein recipe, hitting the gym for a bulk, or out on the
+            scooter finding a new route. I build things to work perfectly, but I
+            design them to look cinematic."
+          </p>
         </div>
       </section>
       <section id="experience" className="hr-rush-section placeholder-section">
